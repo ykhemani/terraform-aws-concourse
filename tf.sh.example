@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# for AWS provider
+export AWS_SECRET_ACCESS_KEY=$(lpass show aws --field AWS_SECRET_ACCESS_KEY)
+export AWS_ACCESS_KEY_ID=$(lpass show aws --field AWS_ACCESS_KEY_ID)
+
+# for acme and cloudflare providers
+export CF_API_EMAIL=$(lpass show cloudflare.com --field=CLOUDFLARE_EMAIL)
+export CLOUDFLARE_EMAIL=$(lpass show cloudflare.com --field=CLOUDFLARE_EMAIL)
+export CLOUDFLARE_API_KEY=$(lpass show cloudflare.com --field=CLOUDFLARE_API_KEY)
+
+TF_VAR_owner_cidr_blocks="[\"$(curl -s https://ipconfig.io)/32\"]" \
+  terraform $1

@@ -1,0 +1,20 @@
+vpc_id                   = "vpc-01234567890abcdef"
+
+# only if you don't want to use Canonical's Ubuntu 18.04 image.
+#ami_id                   = "ami-01234567890abcdef"
+
+# only if you want to encrypt the root volume.
+root_volume_encrypt      = true
+kms_key_id               = "arn:aws:kms:us-west-2:01234567890abcdef:key/01234567890abcdef-0123-0123-01234567890abcdef"
+
+provision_cloudflare_dns = true
+domain                   = "example.com"
+
+ssh_key_name             = "ykhemani"
+
+email_address            = "user@example.com"
+dns_challenge_provider   = "cloudflare"
+san                      = []
+
+owner                    = "ykhemani"
+owner_cidr_blocks        = ["1.2.3.4/32","5.6.7.8/32"]
