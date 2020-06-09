@@ -96,7 +96,7 @@ data template_file user_data {
 
     src_dir                     = "/data/src"
     concourse_config_dir        = "/etc/concourse"
-    bin_dir                     = "/usr/local/bin"
+    top_dir                     = "/usr/local"
     caddy_config_dir            = "/etc/caddy"
 
     web_env_file                = "web.env"

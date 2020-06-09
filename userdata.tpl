@@ -17,7 +17,7 @@ hostname $(cat /etc/hostname)
 log "INFO" "Install Postgress"
 
 apt update
-apt install -y postgresql postgresql-contrib
+apt install -y postgresql postgresql-contrib docker.io
 
 #####
 log "INFO" "Create concourse user"
@@ -46,14 +46,16 @@ mkdir -p \
     ${src_dir} \
     ${concourse_config_dir} \
     ${concourse_config_dir}/ssl \
-    ${bin_dir} && \
+    ${top_dir} && \
   chown ${concourse_user}:${concourse_user} ${concourse_config_dir} && \
   cd ${src_dir} && \
   curl -sLO https://github.com/concourse/concourse/releases/download/v6.2.0/concourse-6.2.0-linux-amd64.tgz && \
   tar xfz ${src_dir}/concourse-6.2.0-linux-amd64.tgz && \
   tar xfz ${src_dir}/concourse/fly-assets/fly-linux-amd64.tgz && \
-  mv ${src_dir}/fly ${bin_dir}/fly && \
-  mv ${src_dir}/concourse/bin/concourse ${bin_dir}/concourse
+  mv ${src_dir}/fly concourse/bin/fly && \
+  mv ${src_dir}/concourse ${top_dir}/concourse
+
+echo 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${top_dir}/concourse/bin"' > /etc/environment
 
 #####
 log "INFO" "Generate SSH Keys"
@@ -65,7 +67,7 @@ cd ${concourse_config_dir}
 
 for i in session_signing_key tsa_host_key worker_key
 do
-  ${bin_dir}/concourse generate-key \
+  ${top_dir}/concourse/bin/concourse generate-key \
     -t ssh \
     -f ${concourse_config_dir}/\$i
 done
@@ -145,7 +147,7 @@ After=postgresql.service
 User=concourse
 Restart=on-failure
 EnvironmentFile=${concourse_config_dir}/${web_env_file}
-ExecStart=${bin_dir}/concourse web
+ExecStart=${top_dir}/concourse/bin/concourse web
 
 [Install]
 WantedBy=multi-user.target
@@ -163,7 +165,7 @@ After=concourse-web.service
 User=root
 Restart=on-failure
 EnvironmentFile=${concourse_config_dir}/${worker_env_file}
-ExecStart=${bin_dir}/concourse worker
+ExecStart=${top_dir}/concourse/bin/concourse worker
 
 [Install]
 WantedBy=multi-user.target
