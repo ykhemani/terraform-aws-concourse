@@ -135,3 +135,58 @@ variable san {
   description = "Subject alternative names (SAN) for ACME cert request."
   default     = ["127.0.0.1"]
 }
+
+# Concourse
+variable concourse_url {
+  type        = string
+  description = "Concourse download URL."
+  default     = "https://github.com/concourse/concourse/releases/download/v6.2.0/concourse-6.2.0-linux-amd64.tgz"
+}
+
+variable src_dir {
+  type        = string
+  description = "Download directory."
+  default     = "/data/src"
+}
+
+variable top_dir {
+  type        = string
+  description = "Install path."
+  default     = "/usr/local"
+}
+
+variable concourse_config_dir {
+  type        = string
+  description = "Concourse config directory."
+  default     = "/etc/concourse"
+}
+
+variable web_env_file {
+  type        = string
+  description = "Concourse web environment file."
+  default     = "web.env"
+}
+
+variable worker_env_file {
+  type        = string
+  description = "Concourse worker environment file."
+  default     = "worker.env"
+}
+
+variable concourse_user {
+  type        = string
+  description = "Concourse user."
+  default     = "concourse"
+}
+
+variable concourse_tls_bind_port {
+  type        = number
+  description = "Concourse web TLS bind port."
+  default     = 8443
+}
+
+variable concourse_garden_dns_server {
+  type        = string
+  description = "Concourse Garden DNS Server."
+  default     = "1.1.1.1"
+}

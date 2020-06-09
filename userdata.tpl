@@ -49,8 +49,8 @@ mkdir -p \
     ${top_dir} && \
   chown ${concourse_user}:${concourse_user} ${concourse_config_dir} && \
   cd ${src_dir} && \
-  curl -sLO https://github.com/concourse/concourse/releases/download/v6.2.0/concourse-6.2.0-linux-amd64.tgz && \
-  tar xfz ${src_dir}/concourse-6.2.0-linux-amd64.tgz && \
+  curl -sL -o concourse.tgz ${concourse_url} && \
+  tar xfz ${src_dir}/concourse.tgz && \
   tar xfz ${src_dir}/concourse/fly-assets/fly-linux-amd64.tgz && \
   mv ${src_dir}/fly concourse/bin/fly && \
   mv ${src_dir}/concourse ${top_dir}/concourse
@@ -124,6 +124,7 @@ cat << EOF > ${concourse_config_dir}/${worker_env_file}
 CONCOURSE_WORK_DIR=/var/lib/concourse
 CONCOURSE_TSA_WORKER_PRIVATE_KEY=${concourse_config_dir}/worker_key
 CONCOURSE_TSA_PUBLIC_KEY=${concourse_config_dir}/tsa_host_key.pub
+CONCOURSE_GARDEN_DNS_SERVER=${concourse_garden_dns_server}
 EOF
 
 #####

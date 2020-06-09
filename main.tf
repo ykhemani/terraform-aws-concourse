@@ -79,7 +79,6 @@ resource random_password postgres_password {
 # locals
 locals {
   common_name                   = "${var.hostname}.${var.domain}"
-  concourse_tls_bind_port       = 8443
   # use ami_id variable if it isn't empty, otherwise use Canonical Ubuntu ami.
   ami_id                        = var.ami_id == "" ? data.aws_ami.ubuntu.id : var.ami_id
 }
@@ -94,21 +93,24 @@ data template_file user_data {
     tls_fullchain               = "${acme_certificate.certificate.certificate_pem}${acme_certificate.certificate.issuer_pem}"
     tls_private_key             = acme_certificate.certificate.private_key_pem
 
-    src_dir                     = "/data/src"
-    concourse_config_dir        = "/etc/concourse"
-    top_dir                     = "/usr/local"
-    caddy_config_dir            = "/etc/caddy"
+    src_dir                     = var.src_dir
+    concourse_config_dir        = var.concourse_config_dir
+    top_dir                     = var.top_dir
 
-    web_env_file                = "web.env"
-    worker_env_file             = "worker.env"
+    web_env_file                = var.web_env_file
+    worker_env_file             = var.worker_env_file
 
-    concourse_user              = "concourse"
+    concourse_user              = var.concourse_user
+
+    concourse_url               = var.concourse_url
 
     common_name                 = local.common_name
     concourse_username          = random_string.concourse_username.result
     concourse_password          = random_password.concourse_password.result
 
-    concourse_tls_bind_port     = local.concourse_tls_bind_port
+    concourse_tls_bind_port     = var.concourse_tls_bind_port
+
+    concourse_garden_dns_server = var.concourse_garden_dns_server
 
     postgres_password           = random_password.postgres_password.result
   }

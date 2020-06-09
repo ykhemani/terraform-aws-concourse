@@ -14,7 +14,7 @@ output c_ssh_connection {
 }
 
 output d_concourse_url {
-  value                       = "https://${local.common_name}:${local.concourse_tls_bind_port}"
+  value                       = "https://${local.common_name}:${var.concourse_tls_bind_port}"
 }
 
 output e_concourse_username {
